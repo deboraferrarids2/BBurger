@@ -1,0 +1,13 @@
+name,category,description,size,image,amount
+Batata Frita,acompanhamento,aprox 150g,pequeno,,800
+Batata Frita,acompanhamento,aprox 250g,medio,,990
+Batata Frita,acompanhamento,aprox 350g,grande,,1100
+Refrigerante,bebida,200ml,pequeno,,800
+Refrigerante,bebida,500ml,medio,,990
+Refrigerante,bebida,700ml,grande,,1100
+cheese burgerstore,lanche,"Pao, carne 200g, queijo cheddar",grande,,2670
+bacon burgerstore,lanche,"Pao, carne 200g, bacon",grande,,2980
+completo burgerstore,lanche,"Pao, carne 200g, queijo cheddar e bacon",grande,,2990
+torta de maça,sobremesa,Torta de maça quente,grande,,1650
+torta de banana,sobremesa,Torta de banana quente com canela,grande,,1650
+sorvete de chocolate,sobremesa,Sorvete de chocolate na casquinha,grande,,950

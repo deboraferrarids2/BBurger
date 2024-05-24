@@ -1,0 +1,1 @@
+CREATE DATABASE challengedb WITH OWNER = fiap;

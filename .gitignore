@@ -1,0 +1,42 @@
+# Python
+*.pyc
+*.pyo
+__pycache__/
+*.pyc
+
+# Local development settings
+local_settings.py
+
+# Secret key
+*.secret_key
+
+# Virtual environment
+venv/
+.env
+
+# Visual Studio Code
+.vscode/
+
+# PyCharm
+.idea/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+
+# Python bytecode
+__pycache__/
+
+# Compiled source
+*.pyc
+*.pyo
+*.pyd
+
