@@ -53,8 +53,20 @@ class OrderViewSet(MixedPermissionModelViewSet):
     
     @action(detail=True, methods=['post'], url_path='cancel', permission_classes=[AllowAny])
     def cancel(self, request, pk=None):
-        order = self.get_object()
-
+        print(f'entrou cancel')  
+        user = request.user
+        if user.is_authenticated:
+            user_id=user.id
+            try:
+                order = Order.objects.get(pk=pk, user=user_id)
+            except Order.DoesNotExist:
+                raise NotFound("Order not found for the given user.")
+        else:
+            try:
+                order = Order.objects.get(pk=pk, session_token=request.query_params.get('session'))
+            except Order.DoesNotExist:
+                raise NotFound("Order not found for the given user.")
+        print(order)
         if order.status == 'em aberto':
             order.status = 'cancelado'
             order.save()
