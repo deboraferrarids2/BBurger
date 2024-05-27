@@ -22,11 +22,21 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def to_internal_value(self, data):
-        if 'cpf' in data:
-            cpf_value = data['cpf']
-            cpf_instance, created = Cpf.get_or_create_cpf(cpf_value)
-            data['cpf'] = cpf_instance
-
+        cpf_value = data.get('cpf')
+        
+        if cpf_value:
+            # Ensure CPF is not empty or just whitespace
+            if cpf_value.strip():
+                # Proceed with getting or creating the CPF instance
+                cpf_instance, created = Cpf.get_or_create_cpf(cpf_value)
+                data['cpf'] = cpf_instance
+            else:
+                # Remove CPF from data if it's empty
+                data.pop('cpf')
+        else:
+            # Remove CPF from data if it's not provided
+            data.pop('cpf', None)
+        
         return super().to_internal_value(data)
   
 
