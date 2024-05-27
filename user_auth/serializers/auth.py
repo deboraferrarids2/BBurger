@@ -11,11 +11,23 @@ class UserSerializer(serializers.ModelSerializer):
     def to_internal_value(self, data):
         if 'cpf' in data:
             cpf_value = data['cpf']
-            cpf_instance, created = Cpf.get_or_create_cpf(cpf_value)
-            data['cpf'] = cpf_instance
-
+            if cpf_value:
+                try:
+                    # Ensure CPF is cleaned and validated before creating or fetching
+                    cpf_cleaned = Cpf.clean_cpf(cpf_value)
+                    if not cpf_cleaned:
+                        raise serializers.ValidationError({'cpf': _('CPF cannot be null or empty')})
+                    if len(cpf_cleaned) != 11:
+                        raise serializers.ValidationError({'cpf': _('CPF must be exactly 11 digits')})
+                    
+                    # Use get_or_create_cpf method without unpacking its return value
+                    cpf_instance, _ = Cpf.get_or_create_cpf(cpf_cleaned)
+                    data['cpf'] = cpf_instance
+                except Exception as e:
+                    raise serializers.ValidationError({'cpf': 'Não foi possível criar o usuário com esse CPF'})
+                
         return super().to_internal_value(data)
-
+            
     def create(self, validated_data):
         user = BaseUser.objects.create(**validated_data)
         user.set_password(validated_data['password'])

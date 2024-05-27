@@ -25,20 +25,15 @@ from rest_framework_simplejwt.tokens import RefreshToken
 def signin(request):
     serializer = LoginSerializer(data=request.data)
     if serializer.is_valid():
-        print(f'entrou is valid')
         if 'email' in serializer.validated_data:
-            print(f'entrou vaçidated email')
             user = authenticate(
                 email=serializer.validated_data['email'],
                 password=serializer.validated_data['password']
             )
         elif 'cpf' in serializer.validated_data:
-            print(f'entrou cpf')
             cpf = serializer.validated_data['cpf']
             baseuser=BaseUser.objects.using('default').get(cpf=cpf)
             email = baseuser.email
-            print(cpf)
-            print(email)
             user = authenticate(
                 email=email,
                 password=serializer.validated_data['password']
@@ -80,10 +75,19 @@ class UserViewSet(MixedPermissionModelViewSet):
             data=request.data, context=self.get_serializer_context()
         )
         serializer.is_valid(raise_exception=True)
-        saved = serializer.save()
+        serializer.save()
 
-        response_serializer = UserGETSerializer(saved)
-        return Response(response_serializer.data, status=status.HTTP_201_CREATED)
+        user = authenticate(
+                email=serializer.validated_data['email'],
+                password=serializer.validated_data['password']
+            )
+
+        refresh = RefreshToken.for_user(user)
+
+        return Response({
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+        }, status=status.HTTP_200_OK)
     
 
 # @api_view(['DELETE'])
