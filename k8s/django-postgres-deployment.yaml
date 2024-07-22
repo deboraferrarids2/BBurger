@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-postgres-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: django-postgres
+  template:
+    metadata:
+      labels:
+        app: django-postgres
+    spec:
+      containers:
+      - name: db
+        image: postgres:latest
+        ports:
+        - containerPort: 5432
+        envFrom:
+        - configMapRef:
+            name: db-config
+        - secretRef:
+            name: db-secret
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: postgres-data
+      - name: app
+        image: deboraferrarids2/challenge_web:v2.0
+        ports:
+        - containerPort: 5000
+        command: ["python", "/usr/src/app/manage.py", "runserver", "0.0.0.0:5000"]
+        livenessProbe:
+          httpGet:
+            path: /health/
+            port: 5000
+          initialDelaySeconds: 10
+          periodSeconds: 30
+      volumes:
+      - name: postgres-data
+        persistentVolumeClaim:
+          claimName: postgres-pvc
