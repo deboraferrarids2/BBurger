@@ -40,3 +40,5 @@ __pycache__/
 *.pyo
 *.pyd
 
+# Ignorar o binário do Minikube
+minikube-linux-amd64
